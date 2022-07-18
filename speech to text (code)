@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ar">
+	<head>
+		<style>
+			/* CSS comes here */
+			body {
+				font-family: arial;
+				font-size: 16px;
+				margin: 0;
+				align-items: center;
+				justify-content: center;
+				min-height: 100vh;
+				color: #000;
+			}
+			button {
+				padding: 12px 20px;
+				background: #7d527b;
+				border:0;
+				cursor:pointer;
+				color:#fff;
+				border-radius: 5px;
+			}
+			#output {
+			    background-color:#f8f3f3;
+			    padding:10px;
+			    width: 100%;
+			    margin-top:20px;
+			    line-height:30px;
+			}
+			.hide {
+			    display:none;
+			}
+			.show {
+			    display:block;
+			}
+			h2{
+				font-size:50px;
+				color: #9cb1e8;
+			}
+		</style>
+		<title>Convert Voice To Text</title>
+	</head>
+	<body>
+		<h2>Convert Voice To Text</h2>
+        <p>Click on the below button and speak something...</p>
+        <p><button type="button" onclick="runSpeechRecognition()">Start</button> &nbsp; <span id="action"></span></p>
+		<div id="output" class="hide"></div>
+		<script>
+			/* JS comes here */
+		    function runSpeechRecognition() {
+		        // get output div reference
+		        var output = document.getElementById("output");
+		        // get action element reference
+		        var action = document.getElementById("action");
+                // new speech recognition object
+                var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+                var recognition = new SpeechRecognition();
+                SpeechRecognition.lang= 'ar';
+
+            
+                // This runs when the speech recognition service starts
+                recognition.onstart = function() {
+                    action.innerHTML = "<small>listening, please speak...</small>";
+                };
+                
+                recognition.onspeechend = function() {
+                    action.innerHTML = "<small>stopped listening, hope you are done...</small>";
+                    recognition.stop();
+                }
+                
+                // This runs when the speech recognition service returns result
+                recognition.onresult = function(event) {
+                    var transcript = event.results[0][0].transcript;
+                    var confidence = event.results[0][0].confidence;
+                    output.innerHTML = "<b>Text:</b> " + transcript;
+                    output.classList.remove("hide");
+                };
+              
+                 // start recognition
+                 recognition.start();
+	        }
+		</script>
+	</body>
+</html>
